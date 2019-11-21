@@ -20,20 +20,25 @@ class Board:
         self.height = height
 
     def compute_key(self, key):
+        tmp_direction = Direction.NULL
         if key == pygame.K_ESCAPE:
             return False
         elif key == pygame.K_LEFT:
-            self.player.direction = Direction.LEFT
+            tmp_direction = Direction.LEFT
             print("left")
         elif key == pygame.K_RIGHT:
-            self.player.direction = Direction.RIGHT
+            tmp_direction = Direction.RIGHT
             print("right")
         elif key == pygame.K_UP:
-            self.player.direction = Direction.UP
+            tmp_direction = Direction.UP
             print("up")
         elif key == pygame.K_DOWN:
-            self.player.direction = Direction.DOWN
+            tmp_direction = Direction.DOWN
             print("down")
+
+        if Direction.is_movement_valid(self.player.previous_direction, tmp_direction):
+            self.player.direction = tmp_direction
+
         return True
 
     def update(self):

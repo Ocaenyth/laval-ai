@@ -8,9 +8,11 @@ class Snake:
         # TODO: better body generation
         self.body = [Position(0, 0), Position(1, 0), Position(2, 0), Position(3, 0)]
         self.direction = Direction.DOWN
+        self.previous_direction = Direction.NULL
 
     def move(self):
         new_body = self.body
         new_body = [new_body[0].get_next_position(self.direction)] + new_body[:-1]
+        self.previous_direction = self.direction
         self.body = new_body
 #         TODO: handle collision
