@@ -29,7 +29,7 @@ def main():
         if tick == FPS / TPS:
             gameOver = board.update()
             if (gameOver):
-                break
+                board = board = Board(BOARD_WIDTH, BOARD_HEIGHT)
             tick = 0
         board.draw_board(window)
         clock.tick(FPS)
