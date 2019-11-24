@@ -27,36 +27,53 @@ def aStar(position, goal):
         closeList.append(node)
 
         if node == end:
-            solution = []
-            while node is not None:
-                solution.append(node.position)
-                node = node.parents
-            return solution
+            return getSolution(node)
 
-        children = [Node(Position(node.position.x + 1, node.position.y), node),
-                    Node(Position(node.position.x - 1, node.position.y), node),
-                    Node(Position(node.position.x, node.position.y + 1), node),
-                    Node(Position(node.position.x, node.position.y - 1), node)]
+        children = getChildren(node)
 
-        inClose = False
-        inOpen = False
         for child in children:
-            for closed in closeList:
-                if child == closed:
-                    inClose = True
-                    break
-            if inClose:
+            if isInClose(child, closeList):
                 pass
-            if child.position.x >= 0 and child.position.y >= 0:
-                child.g = node.g + 1
-                child.h = abs(child.position.x - end.position.x) + abs(child.position.y - end.position.y)
-                child.f = child.g + child.h
-                for openNode in openList:
-                    if child == openNode and child.g >= openNode.g:
-                        inOpen = True
-                        break
-                if inOpen:
+            if child.position.x >= 0 and child.position.y >= 0:  # TODO ajouter check autre extrémité du board
+                updateChild(child, end, node)
+                if isInOpen(child, openList):
                     continue
                 openList.append(child)
             else:
                 pass
+
+
+def getChildren(node):
+    children = [Node(Position(node.position.x + 1, node.position.y), node),
+                Node(Position(node.position.x - 1, node.position.y), node),
+                Node(Position(node.position.x, node.position.y + 1), node),
+                Node(Position(node.position.x, node.position.y - 1), node)]
+    return children
+
+
+def isInClose(child, closeList):
+    for closed in closeList:
+        if child == closed:
+            return True
+    return False
+
+
+def isInOpen(child, openList):
+    for openNode in openList:
+        if child == openNode and child.g >= openNode.g:
+            return True
+    return False
+
+
+def updateChild(child, end, node):
+    child.g = node.g + 1
+    child.h = abs(child.position.x - end.position.x) + abs(child.position.y - end.position.y)
+    child.f = child.g + child.h
+
+
+def getSolution(node):
+    solution = []
+    while node is not None:
+        solution.append(node.position)
+        node = node.parents
+    return solution
