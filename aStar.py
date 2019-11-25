@@ -33,14 +33,12 @@ def aStar(position, goal):
 
         for child in children:
             if isInClose(child, closeList):
-                pass
+                continue
             if child.position.x >= 0 and child.position.y >= 0:  # TODO ajouter check autre extrémité du board
                 updateChild(child, end, node)
                 if isInOpen(child, openList):
                     continue
                 openList.append(child)
-            else:
-                pass
 
 
 def getChildren(node):
