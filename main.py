@@ -6,7 +6,7 @@ from Board import Board
 BOARD_WIDTH = 20
 BOARD_HEIGHT = 20
 FPS = 30
-TPS = 5
+TPS = 30
 
 
 def main(playerType):
@@ -14,6 +14,7 @@ def main(playerType):
         board = Board(BOARD_WIDTH, BOARD_HEIGHT)
     elif playerType == "ai":
         board = Board(BOARD_WIDTH, BOARD_HEIGHT, AiPlayer())
+        #board.setMove()
     tile_size = 15
 
     window_size = (board.width * tile_size, board.height * tile_size)

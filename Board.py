@@ -1,3 +1,5 @@
+import time
+
 import pygame
 
 from Apple import Apple
@@ -20,7 +22,7 @@ class Board:
         self.height = height
         self.aiPlayer = aiPlayer
         if aiPlayer is not None:
-            self.moves = aiPlayer.getMove(self.player.body[0], self.apple.pos)
+            self.moves = self.setMove()
 
     def compute_key(self, key):
         tmp_direction = Direction.NULL
@@ -93,16 +95,19 @@ class Board:
         y = randrange(15)
         self.apple = Apple(x, y)
         if self.aiPlayer is not None:
-            self.moves = self.aiPlayer.getMove(self.player.body[0], self.apple.pos)
+            self.setMove()
 
     def getNextMove(self):
         nextMove = self.moves[0]
         self.moves.remove(nextMove)
-        if nextMove.x - self.player.body[0].x > 0:
+        if nextMove.x - self.player.body[0].x < 0:
             return pygame.K_LEFT
-        elif nextMove.x - self.player.body[0].x < 0:
+        elif nextMove.x - self.player.body[0].x > 0:
             return pygame.K_RIGHT
         elif nextMove.y - self.player.body[0].y > 0:
             return pygame.K_DOWN
         elif nextMove.y - self.player.body[0].y < 0:
             return pygame.K_UP
+
+    def setMove(self):
+        return self.aiPlayer.getMove(self.player.body[0], self.apple.pos, self.player.direction)

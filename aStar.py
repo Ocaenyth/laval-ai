@@ -1,9 +1,11 @@
+from Direction import Direction
 from Position import Position
 
 
 class Node:
-    def __init__(self, position, parent):
+    def __init__(self, position, parent, direction):
         self.position = position
+        self.direction = direction
         self.f = 0
         self.h = 0
         self.g = 0
@@ -13,12 +15,12 @@ class Node:
         return self.position.x == other.position.x and self.position.y == other.position.y
 
 
-def aStar(position, goal):
+def aStar(position, goal, direction):
     openList = []
     closeList = []
 
-    start = Node(position, None)
-    end = Node(goal, None)
+    start = Node(position, None, direction)
+    end = Node(goal, None, None)
     openList.append(start)
 
     while len(openList) > 0:
@@ -42,10 +44,23 @@ def aStar(position, goal):
 
 
 def getChildren(node):
-    children = [Node(Position(node.position.x + 1, node.position.y), node),
-                Node(Position(node.position.x - 1, node.position.y), node),
-                Node(Position(node.position.x, node.position.y + 1), node),
-                Node(Position(node.position.x, node.position.y - 1), node)]
+    children = []
+    if node.direction == Direction.UP:
+        children = [Node(node.position.get_next_position(Direction.RIGHT), node, Direction.RIGHT),
+                    Node(node.position.get_next_position(Direction.LEFT), node, Direction.LEFT),
+                    Node(node.position.get_next_position(Direction.UP), node, Direction.UP)]
+    elif node.direction == Direction.LEFT:
+        children = [Node(node.position.get_next_position(Direction.LEFT), node, Direction.LEFT),
+                    Node(node.position.get_next_position(Direction.UP), node, Direction.UP),
+                    Node(node.position.get_next_position(Direction.DOWN), node, Direction.DOWN)]
+    elif node.direction == Direction.RIGHT:
+        children = [Node(node.position.get_next_position(Direction.RIGHT), node, Direction.RIGHT),
+                    Node(node.position.get_next_position(Direction.UP), node, Direction.UP),
+                    Node(node.position.get_next_position(Direction.DOWN), node, Direction.DOWN)]
+    elif node.direction == Direction.DOWN:
+        children = [Node(node.position.get_next_position(Direction.RIGHT), node, Direction.RIGHT),
+                    Node(node.position.get_next_position(Direction.LEFT), node, Direction.LEFT),
+                    Node(node.position.get_next_position(Direction.DOWN), node, Direction.DOWN)]
     return children
 
 
@@ -74,4 +89,6 @@ def getSolution(node):
     while node is not None:
         solution.append(node.position)
         node = node.parents
+    solution = list(reversed(solution))
+    solution.pop(0)
     return solution
