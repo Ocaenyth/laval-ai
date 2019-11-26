@@ -10,8 +10,10 @@ TPS = 10
 
 
 def main(playerType):
+    fps = FPS
     if playerType == "ai":
         board = Board(BOARD_WIDTH, BOARD_HEIGHT, AiPlayer())
+        fps = TPS
         # board.setMove()
     else:
         board = Board(BOARD_WIDTH, BOARD_HEIGHT)
@@ -36,14 +38,14 @@ def main(playerType):
             run = board.compute_key(move)
 
         tick += 1
-        if tick == FPS / TPS:
+        if tick >= fps / TPS or playerType == "ai":
             gameOver = board.update()
             if (gameOver):
                 board = Board(BOARD_WIDTH, BOARD_HEIGHT)
             tick = 0
 
         board.draw_board(window)
-        clock.tick(FPS)
+        clock.tick(fps)
 
 
 if __name__ == "__main__":
