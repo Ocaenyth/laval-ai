@@ -17,7 +17,7 @@ PLAYER_HEAD_COLOR = (20, 163, 34)
 class Board:
     def __init__(self, width, height, aiPlayer=None):
         self.player = Snake()
-        self.apple = Apple(randrange(15), randrange(15))
+        self.apple = Apple(randrange(width), randrange(height))
         self.width = width
         self.height = height
         self.aiPlayer = aiPlayer
@@ -30,16 +30,12 @@ class Board:
             return False
         elif key == pygame.K_LEFT:
             tmp_direction = Direction.LEFT
-            print("left")
         elif key == pygame.K_RIGHT:
             tmp_direction = Direction.RIGHT
-            print("right")
         elif key == pygame.K_UP:
             tmp_direction = Direction.UP
-            print("up")
         elif key == pygame.K_DOWN:
             tmp_direction = Direction.DOWN
-            print("down")
 
         if Direction.is_movement_valid(self.player.previous_direction, tmp_direction):
             self.player.direction = tmp_direction
@@ -50,8 +46,8 @@ class Board:
         appleEaten = self.player.move(self.apple)
         if appleEaten:
             self.getNewApple()
-        collision = self.player.checkCollision(15)
-        if (collision):
+        collision = self.player.checkCollision(self.width, self.height)
+        if collision:
             return True
 
     def draw_board(self, window):
@@ -91,8 +87,8 @@ class Board:
             i += 1
 
     def getNewApple(self):
-        x = randrange(15)
-        y = randrange(15)
+        x = randrange(self.width)
+        y = randrange(self.height)
         self.apple = Apple(x, y)
         if self.aiPlayer is not None:
             self.setMove()
