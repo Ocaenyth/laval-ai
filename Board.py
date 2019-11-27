@@ -103,7 +103,7 @@ class Board:
         self.apple = Apple(x, y)
         # TODO: make sure the apple did not spawn on the player body
         if self.aiPlayer is not None:
-            self.setMove()
+            self.moves = self.setMove()
 
     # get player next move if it's an AI
     def getNextMove(self):
