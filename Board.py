@@ -95,7 +95,6 @@ class Board:
 
     def getNextMove(self):
         nextMove = self.moves[0]
-        print("test")
         self.moves.remove(nextMove)
         if nextMove.x - self.player.body[0].x < 0:
             return pygame.K_LEFT

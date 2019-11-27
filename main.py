@@ -41,7 +41,7 @@ def main(playerType):
             gameOver = board.update()
             if (gameOver):
                 if playerType == "ai":
-                    board = Board(BOARD_WIDTH, BOARD_HEIGHT, AiPlayer)
+                    board = Board(BOARD_WIDTH, BOARD_HEIGHT, AiPlayer())
                 else:
                     board = Board(BOARD_WIDTH, BOARD_HEIGHT)
             tick = 0
