@@ -98,12 +98,16 @@ class Board:
 
     # Create a new apple
     def getNewApple(self):
-        x = randrange(self.width)
-        y = randrange(self.height)
-        self.apple = Apple(x, y)
-        # TODO: make sure the apple did not spawn on the player body
-        if self.aiPlayer is not None:
-            self.moves = self.setMove()
+        while True:
+            x = randrange(self.width - 2) + 1
+            y = randrange(self.height - 2) + 1
+            for b in self.player.body:
+                if b.x == x and b.y == y:
+                    continue
+            self.apple = Apple(x, y)
+            if self.aiPlayer is not None:
+                self.moves = self.setMove()
+            return
 
     # get player next move if it's an AI
     def getNextMove(self):

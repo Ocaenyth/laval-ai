@@ -6,7 +6,7 @@ from Board import Board, TILE_SIZE
 BOARD_WIDTH = 20
 BOARD_HEIGHT = 20
 FPS = 30
-TPS = 10
+TPS = 30
 
 
 def main(playerType):
