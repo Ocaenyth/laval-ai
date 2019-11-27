@@ -25,11 +25,21 @@ def main(playerType):
     run = True
     tick = 0
 
+    pause = False
     while run:
+        if pause:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    pause = False
+            clock.tick(fps)
+            continue
+
         if playerType == "player":
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    pause = True
                 elif event.type == pygame.KEYDOWN:
                     run = board.compute_key(event.key)
         elif playerType == "ai":

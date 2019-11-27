@@ -2,7 +2,9 @@ from Position import Position
 from Direction import Direction
 
 
+# Snake class
 class Snake:
+    # Snake constructor
     def __init__(self):
         self.name = "snake"
         # TODO: better body generation
@@ -10,6 +12,7 @@ class Snake:
         self.direction = Direction.LEFT
         self.previous_direction = Direction.NULL
 
+    # Makes the snake move one tick
     def move(self, apple):
         new_body = self.body
         new_body = [new_body[0].get_next_position(self.direction)] + new_body[:-1]
@@ -18,6 +21,8 @@ class Snake:
         eat = self.checkApple(apple)
         return eat
 
+    # Returns true if the snake ran in a wall / body
+    # False otherwise
     def checkCollision(self, b_width, b_height):
         if self.body[0].x == b_width or self.body[0].x < 0:
             return True
@@ -28,6 +33,8 @@ class Snake:
                 return True
         return False
 
+    # Returns true if the snake's head is on an apple
+    # False otherwise
     def checkApple(self, apple):
         if self.body[0].x == apple.pos.x and self.body[0].y == apple.pos.y:
             self.body.insert(0,self.body[0].get_next_position(self.direction))
