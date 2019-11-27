@@ -1,6 +1,7 @@
 import enum
 
 
+# Simple enumeration class for the snake Direction
 class Direction(enum.Enum):
     UP = 0
     RIGHT = 1
@@ -8,6 +9,7 @@ class Direction(enum.Enum):
     LEFT = 3
     NULL = 4
 
+    # Static method to check if a new direction is valid
     def is_movement_valid(prev, new):
         if new == Direction.NULL:
             return False
