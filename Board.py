@@ -19,12 +19,14 @@ class Board:
     # Board constructor
     def __init__(self, width, height, aiPlayer=None):
         self.player = Snake()
-        self.apple = Apple(randrange(width), randrange(height))
+        # Instanciate a dummy apply
+        self.apple = Apple(0, 0)
         self.width = width
         self.height = height
         self.aiPlayer = aiPlayer
         if aiPlayer is not None:
             self.moves = self.setMove()
+        self.getNewApple()
 
     # Will do the appropriate action based on the key given
     def compute_key(self, key):
