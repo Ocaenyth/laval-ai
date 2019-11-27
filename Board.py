@@ -19,12 +19,14 @@ class Board:
     # Board constructor
     def __init__(self, width, height, aiPlayer=None):
         self.player = Snake()
-        self.apple = Apple(randrange(width), randrange(height))
+        # Instanciate a dummy apply
+        self.apple = Apple(0, 0)
         self.width = width
         self.height = height
         self.aiPlayer = aiPlayer
         if aiPlayer is not None:
             self.moves = self.setMove()
+        self.getNewApple()
 
     # Will do the appropriate action based on the key given
     def compute_key(self, key):
@@ -98,16 +100,20 @@ class Board:
 
     # Create a new apple
     def getNewApple(self):
-        while True:
-            x = randrange(self.width - 2) + 1
-            y = randrange(self.height - 2) + 1
+        retry = True
+        while retry:
+            retry = False
+            x = randrange(self.width)
+            y = randrange(self.height)
             for b in self.player.body:
                 if b.x == x and b.y == y:
-                    continue
+                    retry = True
+                    break
+            if retry:
+                continue
             self.apple = Apple(x, y)
             if self.aiPlayer is not None:
                 self.moves = self.setMove()
-            return
 
     # get player next move if it's an AI
     def getNextMove(self):

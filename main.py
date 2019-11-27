@@ -3,10 +3,10 @@ import pygame
 from AiPlayer import AiPlayer
 from Board import Board, TILE_SIZE
 
-BOARD_WIDTH = 20
-BOARD_HEIGHT = 20
+BOARD_WIDTH = 10
+BOARD_HEIGHT = 10
 FPS = 30
-TPS = 30
+TPS = 100
 
 
 def main(playerType):
@@ -16,9 +16,8 @@ def main(playerType):
         fps = TPS
     else:
         board = Board(BOARD_WIDTH, BOARD_HEIGHT)
-    tile_size = TILE_SIZE
 
-    window_size = (board.width * tile_size, board.height * tile_size)
+    window_size = (board.width * TILE_SIZE, board.height * TILE_SIZE)
     window = pygame.display.set_mode(window_size)
 
     clock = pygame.time.Clock()

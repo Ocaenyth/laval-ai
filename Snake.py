@@ -18,8 +18,13 @@ class Snake:
         new_body = [new_body[0].get_next_position(self.direction)] + new_body[:-1]
         self.previous_direction = self.direction
         self.body = new_body
-        eat = self.checkApple(apple)
-        return eat
+
+        ate_apple = self.checkApple(apple)
+        if ate_apple:
+            # Duplicate the last body part
+            self.body = new_body + new_body[-1:]
+
+        return ate_apple
 
     # Returns true if the snake ran in a wall / body
     # False otherwise
@@ -36,7 +41,4 @@ class Snake:
     # Returns true if the snake's head is on an apple
     # False otherwise
     def checkApple(self, apple):
-        if self.body[0].x == apple.pos.x and self.body[0].y == apple.pos.y:
-            self.body.insert(0,self.body[0].get_next_position(self.direction))
-            return True
-        return False
+        return self.body[0].x == apple.pos.x and self.body[0].y == apple.pos.y

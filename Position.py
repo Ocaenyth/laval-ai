@@ -8,6 +8,9 @@ class Position:
         self.x = x
         self.y = y
 
+    def __str__(self):
+        return "X-" + str(self.x) + " | Y:" + str(self.y)
+
     # get the next position based on direction
     def get_next_position(self, direction):
         x = self.x
