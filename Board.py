@@ -98,16 +98,20 @@ class Board:
 
     # Create a new apple
     def getNewApple(self):
-        while True:
-            x = randrange(self.width - 2) + 1
-            y = randrange(self.height - 2) + 1
+        retry = True
+        while retry:
+            retry = False
+            x = randrange(self.width)
+            y = randrange(self.height)
             for b in self.player.body:
                 if b.x == x and b.y == y:
-                    continue
+                    retry = True
+                    break
+            if retry:
+                continue
             self.apple = Apple(x, y)
             if self.aiPlayer is not None:
                 self.moves = self.setMove()
-            return
 
     # get player next move if it's an AI
     def getNextMove(self):
