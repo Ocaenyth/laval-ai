@@ -14,7 +14,9 @@ PLAYER_COLOR = (23, 212, 45)
 PLAYER_HEAD_COLOR = (20, 163, 34)
 
 
+# Game board class
 class Board:
+    # Board constructor
     def __init__(self, width, height, aiPlayer=None):
         self.player = Snake()
         self.apple = Apple(randrange(width), randrange(height))
@@ -24,6 +26,7 @@ class Board:
         if aiPlayer is not None:
             self.moves = self.setMove()
 
+    # Will do the appropriate action based on the key given
     def compute_key(self, key):
         tmp_direction = Direction.NULL
         if key == pygame.K_ESCAPE:
@@ -37,11 +40,15 @@ class Board:
         elif key == pygame.K_DOWN:
             tmp_direction = Direction.DOWN
 
+        # Make sure that the new direction is valid
+        # (the snake cannot go back on UP if it was going DOWN)
         if Direction.is_movement_valid(self.player.previous_direction, tmp_direction):
             self.player.direction = tmp_direction
 
         return True
 
+    # Update the game board and trigger potential events
+    # (an apple was eaten or the snake ran in a wall / itself)
     def update(self):
         appleEaten = self.player.move(self.apple)
         if appleEaten:
@@ -50,12 +57,14 @@ class Board:
         if collision:
             return True
 
+    # Redraw the board as to update it
     def draw_board(self, window):
         window.fill(TILE_COLOR)
         self.draw_apples(window)
         self.draw_player(window)
         pygame.display.flip()
 
+    # Will draw the apples accordingly to their position
     def draw_apples(self, window):
         apple_width = TILE_SIZE / 2
         pos = self.apple.pos
@@ -69,6 +78,7 @@ class Board:
         pygame.draw.rect(window, APPLE_COLOR,
                          (x, y, apple_width, apple_width))
 
+    # Will draw the player body accordingly to its positions
     def draw_player(self, window):
         offset = 2
         player_width = TILE_SIZE - offset * 2
@@ -86,13 +96,16 @@ class Board:
                 pygame.draw.rect(window, PLAYER_COLOR, (x, y, player_width, player_width))
             i += 1
 
+    # Create a new apple
     def getNewApple(self):
         x = randrange(self.width)
         y = randrange(self.height)
         self.apple = Apple(x, y)
+        # TODO: make sure the apple did not spawn on the player body
         if self.aiPlayer is not None:
             self.setMove()
 
+    # get player next move if it's an AI
     def getNextMove(self):
         nextMove = self.moves[0]
         self.moves.remove(nextMove)
@@ -105,5 +118,7 @@ class Board:
         elif nextMove.y - self.player.body[0].y < 0:
             return pygame.K_UP
 
+    # Called when an apple is eaten
+    # Get a new set of moves for the snake
     def setMove(self):
         return self.aiPlayer.getMove(self.player.body[0], self.apple.pos, self.player.direction)
