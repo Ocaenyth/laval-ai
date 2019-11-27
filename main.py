@@ -14,7 +14,6 @@ def main(playerType):
     if playerType == "ai":
         board = Board(BOARD_WIDTH, BOARD_HEIGHT, AiPlayer())
         fps = TPS
-        # board.setMove()
     else:
         board = Board(BOARD_WIDTH, BOARD_HEIGHT)
     tile_size = TILE_SIZE
@@ -41,7 +40,10 @@ def main(playerType):
         if tick >= fps / TPS or playerType == "ai":
             gameOver = board.update()
             if (gameOver):
-                board = Board(BOARD_WIDTH, BOARD_HEIGHT)
+                if playerType == "ai":
+                    board = Board(BOARD_WIDTH, BOARD_HEIGHT, AiPlayer)
+                else:
+                    board = Board(BOARD_WIDTH, BOARD_HEIGHT)
             tick = 0
 
         board.draw_board(window)
@@ -49,4 +51,4 @@ def main(playerType):
 
 
 if __name__ == "__main__":
-    main("player")
+    main("ai")

@@ -7,15 +7,15 @@ class Snake:
         self.name = "snake"
         # TODO: better body generation
         self.body = [Position(0, 0), Position(1, 0), Position(2, 0), Position(3, 0)]
-        self.direction = Direction.DOWN
+        self.direction = Direction.LEFT
         self.previous_direction = Direction.NULL
 
     def move(self, apple):
-        eat = self.checkApple(apple)
         new_body = self.body
         new_body = [new_body[0].get_next_position(self.direction)] + new_body[:-1]
         self.previous_direction = self.direction
         self.body = new_body
+        eat = self.checkApple(apple)
         return eat
 
     def checkCollision(self, b_width, b_height):
@@ -30,6 +30,6 @@ class Snake:
 
     def checkApple(self, apple):
         if self.body[0].x == apple.pos.x and self.body[0].y == apple.pos.y:
-            self.body.insert(0, Position(apple.pos.x, apple.pos.y))
+            self.body.insert(0,self.body[0].get_next_position(self.direction))
             return True
         return False
