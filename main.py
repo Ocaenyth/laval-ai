@@ -48,7 +48,7 @@ def main(playerType):
 
         if tick >= fps / TPS or playerType == "ai":
             gameOver = board.update()
-            if (gameOver):
+            if gameOver or board.moves is None:
                 if playerType == "ai":
                     board = Board(BOARD_WIDTH, BOARD_HEIGHT, AiPlayer())
                 else:
