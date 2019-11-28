@@ -141,18 +141,25 @@ class Board:
             if self.aiPlayer is not None:
                 self.moves = self.setMove()
 
-    # get player next move if it's an AI
-    def getNextMove(self):
+    # post the AI's next move to pygame's event queue
+    def post_next_move(self):
+        rand_key = pygame.K_l
         nextMove = self.moves[0]
-        self.moves.remove(nextMove)
+
+        # Set it to a useless key first
+        event = pygame.event.Event(pygame.KEYDOWN, {"key": rand_key})
         if nextMove.x - self.player.body[0].x < 0:
-            return pygame.K_LEFT
+            event = pygame.event.Event(pygame.KEYDOWN, {"key": pygame.K_LEFT})
         elif nextMove.x - self.player.body[0].x > 0:
-            return pygame.K_RIGHT
+            event = pygame.event.Event(pygame.KEYDOWN, {"key": pygame.K_RIGHT})
         elif nextMove.y - self.player.body[0].y > 0:
-            return pygame.K_DOWN
+            event = pygame.event.Event(pygame.KEYDOWN, {"key": pygame.K_DOWN})
         elif nextMove.y - self.player.body[0].y < 0:
-            return pygame.K_UP
+            event = pygame.event.Event(pygame.KEYDOWN, {"key": pygame.K_UP})
+
+        if event.key != rand_key:
+            self.moves.remove(nextMove)
+            pygame.event.post(event)
 
     # Called when an apple is eaten
     # Get a new set of moves for the snake
