@@ -1,11 +1,10 @@
-import time
+from random import randrange
 
 import pygame
 
 from Apple import Apple
 from Direction import Direction
 from Snake import Snake
-from random import randrange
 
 TILE_SIZE = 20
 TILE_COLOR = (255, 255, 255)
@@ -21,7 +20,7 @@ class Board:
     def __init__(self, width, height, aiPlayer=None):
         self.player = Snake()
         # Instanciate a dummy apple
-        self.apple = Apple(0, 0)
+        self.apple = Apple(0, 1)
         self.width = width
         self.height = height
         self.aiPlayer = aiPlayer
@@ -157,4 +156,5 @@ class Board:
     # Called when an apple is eaten
     # Get a new set of moves for the snake
     def setMove(self):
-        return self.aiPlayer.getMove(self.player.body[0], self.apple.pos, self.player.direction)
+        return self.aiPlayer.getMove(self.player.body[0], self.apple.pos, self.player.direction, self.player.body,
+                                     self.height, self.width)

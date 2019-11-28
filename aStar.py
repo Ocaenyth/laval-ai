@@ -1,5 +1,4 @@
 from Direction import Direction
-from Position import Position
 
 
 class Node:
@@ -15,7 +14,7 @@ class Node:
         return self.position.x == other.position.x and self.position.y == other.position.y
 
 
-def aStar(position, goal, direction):
+def aStar(position, goal, direction, body, height, width):
     openList = []
     closeList = []
 
@@ -36,9 +35,11 @@ def aStar(position, goal, direction):
         for child in children:
             if isInClose(child, closeList):
                 continue
-            if child.position.x >= 0 and child.position.y >= 0:  # TODO ajouter check autre extrémité du board
+            if 0 <= child.position.x <= width and 0 <= child.position.y <= height:
                 updateChild(child, end, node)
                 if isInOpen(child, openList):
+                    continue
+                if isInBody(child, body):
                     continue
                 openList.append(child)
 
@@ -74,6 +75,13 @@ def isInClose(child, closeList):
 def isInOpen(child, openList):
     for openNode in openList:
         if child == openNode and child.g >= openNode.g:
+            return True
+    return False
+
+
+def isInBody(child, body):
+    for position in body:
+        if child.position.x == position.x and child.position.y == position.y:
             return True
     return False
 
