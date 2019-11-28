@@ -30,22 +30,22 @@ def main(playerType):
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     pause = False
+                if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                    run = False
             clock.tick(fps)
             continue
 
-        if playerType == "player":
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run = False
-                elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                    pause = True
-                elif event.type == pygame.KEYDOWN:
-                    run = board.compute_key(event.key)
-        elif playerType == "ai":
-            move = board.getNextMove()
-            run = board.compute_key(move)
+        if playerType == "ai":
+            board.post_next_move()
 
-        tick += 1
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                pause = True
+            elif event.type == pygame.KEYDOWN:
+                run = board.compute_key(event.key)
+
         if tick >= fps / TPS or playerType == "ai":
             gameOver = board.update()
             if gameOver or board.moves is None:
