@@ -10,6 +10,7 @@ class Direction(enum.Enum):
     NULL = 4
 
     # Static method to check if a new direction is valid
+    @staticmethod
     def is_movement_valid(prev, new):
         if new == Direction.NULL:
             return False
@@ -22,3 +23,16 @@ class Direction(enum.Enum):
         if prev == Direction.RIGHT and new == Direction.LEFT:
             return False
         return True
+
+    # Static method to get a direction from a set of
+    # position and move
+    @staticmethod
+    def get_direction_from_pos_move(pos, move):
+        if move.x - pos.x < 0:
+            return Direction.LEFT
+        elif move.x - pos.x > 0:
+            return Direction.RIGHT
+        elif move.y - pos.y > 0:
+            return Direction.DOWN
+        elif move.y - pos.y < 0:
+            return Direction.UP

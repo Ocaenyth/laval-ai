@@ -8,8 +8,8 @@ class Snake:
     def __init__(self):
         self.name = "snake"
         # TODO: better body generation
-        self.body = [Position(0, 0), Position(1, 0), Position(2, 0), Position(3, 0)]
-        self.direction = Direction.LEFT
+        self.body = [Position(0, 1), Position(0, 0), Position(1, 0), Position(2, 0), Position(3, 0)]
+        self.direction = Direction.DOWN
         self.previous_direction = Direction.NULL
 
     # Makes the snake move one tick

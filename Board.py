@@ -12,6 +12,7 @@ TILE_COLOR = (255, 255, 255)
 APPLE_COLOR = (212, 23, 23)
 PLAYER_COLOR = (23, 212, 45)
 PLAYER_HEAD_COLOR = (20, 163, 34)
+NEXT_MOVE_COLOR = (14, 188, 232)
 
 
 # Game board class
@@ -19,7 +20,7 @@ class Board:
     # Board constructor
     def __init__(self, width, height, aiPlayer=None):
         self.player = Snake()
-        # Instanciate a dummy apply
+        # Instanciate a dummy apple
         self.apple = Apple(0, 0)
         self.width = width
         self.height = height
@@ -62,8 +63,10 @@ class Board:
     # Redraw the board as to update it
     def draw_board(self, window):
         window.fill(TILE_COLOR)
-        self.draw_apples(window)
         self.draw_player(window)
+        if self.aiPlayer is not None:
+            self.draw_next_moves(window)
+        self.draw_apples(window)
         pygame.display.flip()
 
     # Will draw the apples accordingly to their position
@@ -97,6 +100,29 @@ class Board:
             else:
                 pygame.draw.rect(window, PLAYER_COLOR, (x, y, player_width, player_width))
             i += 1
+
+    def draw_next_moves(self, window):
+        offset = 2
+        texture_width = TILE_SIZE - offset * 2
+        color = NEXT_MOVE_COLOR
+        tot_moves = len(self.moves) + 2
+
+        pos = self.player.body[0]
+        for move in self.moves:
+            pos = pos.get_pos_from_move(move)
+            # Actual drawing
+            x = pos.x * TILE_SIZE
+            x += offset
+
+            y = pos.y * TILE_SIZE
+            y += offset
+            pygame.draw.rect(window, color, (x, y, texture_width, texture_width))
+
+            r, g, b = color[0], color[1], color[2]
+            r -= NEXT_MOVE_COLOR[0] / tot_moves
+            g -= NEXT_MOVE_COLOR[1] / tot_moves
+            b -= NEXT_MOVE_COLOR[2] / tot_moves
+            color = (r, g, b)
 
     # Create a new apple
     def getNewApple(self):

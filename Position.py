@@ -1,3 +1,5 @@
+import pygame
+
 from Direction import Direction
 
 
@@ -24,3 +26,7 @@ class Position:
         if direction == Direction.DOWN:
             y += 1
         return Position(x, y)
+
+    def get_pos_from_move(self, move):
+        direction = Direction.get_direction_from_pos_move(self, move)
+        return self.get_next_position(direction)
