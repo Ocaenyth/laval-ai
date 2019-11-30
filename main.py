@@ -8,16 +8,16 @@ import argparse
 def parseArguments():
     parser = argparse.ArgumentParser(description="Let's play a game of Snake ! Or watch an AI do it !")
     parser.add_argument("-p", '--player', dest='player', action="store_true", help="If set, the AI will not play")
-    parser.add_argument('-t', "--tps", metavar="", type=int, dest='tps', default=10,
+    parser.add_argument('-t', "--tps", metavar="X", type=int, dest='tps', default=10,
                         help="Sets the rate at which the game will update (per second)")
-    parser.add_argument('-f', "--fps", metavar="", type=int, dest='fps', default=30,
+    parser.add_argument('-f', "--fps", metavar="X", type=int, dest='fps', default=30,
                         help="Sets the rate at which the window will update. Fps will always favor the highest "
                              "between TPS and FPS")
     parser.add_argument('-o', "--occurrences", metavar="", type=int, dest='occurrences', default=1,
                         help="Sets the amount of games to play before triggering game over.")
-    parser.add_argument('-bw', "--board-width", metavar="", type=int, dest='width', default=20,
+    parser.add_argument('-bw', "--board-width", metavar="X", type=int, dest='width', default=20,
                         help="Sets the board's width")
-    parser.add_argument('-bh', "--board-height", metavar="",
+    parser.add_argument('-bh', "--board-height", metavar="X",
                         type=int, dest='height', default=20, help="Sets the board's height")
     parser.add_argument('-l', "--longest", dest='longest', action="store_true",
                         help="If set, the AI will use the reverse A* algorithm instead")
@@ -25,7 +25,6 @@ def parseArguments():
                         help="If set, the AI's movements will be displayed on screen")
 
     args = parser.parse_args()
-    print(args)
 
     return args
 
@@ -36,7 +35,6 @@ def main():
     current_occurrence = 0
 
     args = parseArguments()
-    print(args)
 
     tps = args.tps
     fps = max(tps, args.fps)
