@@ -5,22 +5,26 @@ from Board import TILE_SIZE, Board
 import argparse
 
 
-FPS = 30
-
-
-
 def parseArguments():
-    parser = argparse.ArgumentParser(description='argument')
-    parser.add_argument('-p', metavar='player', type=bool, dest='player', default=False)
-    parser.add_argument('-t', metavar='tick', type=int, dest='tick', default=5)
-    parser.add_argument('-o', metavar='occurence', type=int, dest='occurence', default=1)
-    parser.add_argument('-bw', metavar='width', type=int, dest='width', default=20)
-    parser.add_argument('-bh', metavar='height', type=int, dest='height', default=20)
-    parser.add_argument('-s', metavar='ia', type=bool, dest='ia', default=True)
-    parser.add_argument('-d', metavar='affichage', type=bool, dest='affichage', default=True)
+    parser = argparse.ArgumentParser(description="Let's play a game of Snake ! Or watch an AI do it !")
+    parser.add_argument("-p", '--player', dest='player', action="store_true", help="If set, the AI will not play")
+    parser.add_argument('-t', "--tps", metavar="", type=int, dest='tps', default=10,
+                        help="Sets the rate at which the game will update (per second)")
+    parser.add_argument('-f', "--fps", metavar="", type=int, dest='fps', default=30,
+                        help="Sets the rate at which the window will update. Fps will always favor the highest "
+                             "between TPS and FPS")
+    parser.add_argument('-o', "--occurrences", metavar="", type=int, dest='occurrences', default=1,
+                        help="Sets the amount of games to play before triggering game over.")
+    parser.add_argument('-bw', "--board-width", metavar="", type=int, dest='width', default=20,
+                        help="Sets the board's width")
+    parser.add_argument('-bh', "--board-height", metavar="",
+                        type=int, dest='height', default=20, help="Sets the board's height")
+    parser.add_argument('-l', "--longest", dest='longest', action="store_true",
+                        help="If set, the AI will use the reverse A* algorithm instead")
+    parser.add_argument('-d', "--display-moves", dest='display', action="store_true",
+                        help="If set, the AI's movements will be displayed on screen")
 
     args = parser.parse_args()
-
     print(args)
 
     return args
@@ -28,17 +32,19 @@ def parseArguments():
 
 def main():
     pygame.init()
-    
-    current_occurence = 0
+
+    current_occurrence = 0
 
     args = parseArguments()
+    print(args)
 
-    fps = FPS
-    board = Board(args.width, args.height, args.occurence, aiPlayer=not args.player, shortest=args.ia)
-    if not args.player:
-        fps = args.tick
+    tps = args.tps
+    fps = max(tps, args.fps)
+    board = Board(args.width, args.height, args.occurrences, not args.player, not args.longest, args.display)
+    if board.isAI:
+        fps = args.tps
 
-    window_size = (args.width * TILE_SIZE,  args.height * TILE_SIZE)
+    window_size = (args.width * TILE_SIZE, args.height * TILE_SIZE)
     window = pygame.display.set_mode(window_size)
 
     clock = pygame.time.Clock()
@@ -56,7 +62,7 @@ def main():
             clock.tick(fps)
             continue
 
-        if not args.player:
+        if board.isAI:
             board.post_next_move()
 
         for event in pygame.event.get():
@@ -68,18 +74,19 @@ def main():
                 run = board.compute_key(event.key)
 
         tick += 1
-        if tick >= fps / args.tick or not args.player:
+        if tick >= fps / tps or board.isAI:
             gameOver = board.update()
-            if gameOver or (not args.player and board.moves is None):
-                current_occurence += 1
+            if gameOver or (board.isAI and board.moves is None):
+                current_occurrence += 1
                 cont = True
                 board.scores.append(board.score)
-                if current_occurence == args.occurence:
+                if current_occurrence == args.occurrences:
                     cont = board.game_over(window, clock)
-                    current_occurence = 0
-                    board = Board(args.width, args.height, args.occurence, aiPlayer=not args.player, shortest=args.ia)
-                if not cont:
-                    return
+                    if not cont:
+                        return
+                    current_occurrence = 0
+                    board = Board(board.width, board.height, board.occurrences, board.isAI, board.shortest,
+                                  board.display_moves)
                 board.reset()
             tick = 0
 
