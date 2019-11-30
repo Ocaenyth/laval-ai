@@ -4,12 +4,9 @@ from Board import TILE_SIZE, Board
 
 import argparse
 
-BOARD_WIDTH = 50
-BOARD_HEIGHT = 50
+
 FPS = 30
-TPS = 1000
-WINDOW_WIDTH = BOARD_WIDTH * TILE_SIZE
-WINDOW_HEIGHT = BOARD_HEIGHT * TILE_SIZE
+
 
 
 def parseArguments():
@@ -31,19 +28,17 @@ def parseArguments():
 
 def main():
     pygame.init()
-    occurences = 1
+    
     current_occurence = 0
 
     args = parseArguments()
 
     fps = FPS
+    board = Board(args.width, args.height, args.occurence, aiPlayer=not args.player, shortest=args.ia)
     if not args.player:
-        board = Board(BOARD_WIDTH, BOARD_HEIGHT, occurences, True)
-        fps = TPS
-    else:
-        board = Board(BOARD_WIDTH, BOARD_HEIGHT, occurences)
+        fps = args.tick
 
-    window_size = (WINDOW_WIDTH, WINDOW_HEIGHT)
+    window_size = (args.width * TILE_SIZE,  args.height * TILE_SIZE)
     window = pygame.display.set_mode(window_size)
 
     clock = pygame.time.Clock()
@@ -73,16 +68,16 @@ def main():
                 run = board.compute_key(event.key)
 
         tick += 1
-        if tick >= fps / TPS or not args.player:
+        if tick >= fps / args.tick or not args.player:
             gameOver = board.update()
             if gameOver or (not args.player and board.moves is None):
                 current_occurence += 1
                 cont = True
                 board.scores.append(board.score)
-                if current_occurence == occurences:
+                if current_occurence == args.occurence:
                     cont = board.game_over(window, clock)
                     current_occurence = 0
-                    board = Board(BOARD_WIDTH, BOARD_HEIGHT, occurences, True)
+                    board = Board(args.width, args.height, args.occurence, aiPlayer=not args.player, shortest=args.ia)
                 if not cont:
                     return
                 board.reset()
