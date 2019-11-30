@@ -14,7 +14,7 @@ class Node:
         return self.position.x == other.position.x and self.position.y == other.position.y
 
 
-def aStar(position, goal, direction, body, height, width):
+def aStar(position, goal, direction, body, height, width, shortest):
     openList = []
     closeList = []
 
@@ -23,7 +23,10 @@ def aStar(position, goal, direction, body, height, width):
     openList.append(start)
 
     while len(openList) > 0:
-        node = min(openList, key=lambda x: x.f)
+        if shortest:
+            node = min(openList, key=lambda x: x.f)
+        else:
+            node = max(openList, key=lambda x: x.f)
         openList.remove(node)
         closeList.append(node)
 
@@ -35,7 +38,7 @@ def aStar(position, goal, direction, body, height, width):
         for child in children:
             if isInClose(child, closeList):
                 continue
-            if 0 <= child.position.x <= width and 0 <= child.position.y <= height:
+            if 0 <= child.position.x < width and 0 <= child.position.y < height:
                 updateChild(child, end, node)
                 if isInOpen(child, openList):
                     continue
