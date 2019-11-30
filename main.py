@@ -12,10 +12,8 @@ WINDOW_WIDTH = BOARD_WIDTH * TILE_SIZE
 WINDOW_HEIGHT = BOARD_HEIGHT * TILE_SIZE
 
 
-
-
 def parseArguments():
-    parser=argparse.ArgumentParser(description='argument')
+    parser = argparse.ArgumentParser(description='argument')
     parser.add_argument('-p', metavar='player', type=bool, dest='player', default=False)
     parser.add_argument('-t', metavar='tick', type=int, dest='tick', default=5)
     parser.add_argument('-o', metavar='occurence', type=int, dest='occurence', default=1)
@@ -23,7 +21,6 @@ def parseArguments():
     parser.add_argument('-bh', metavar='height', type=int, dest='height', default=20)
     parser.add_argument('-s', metavar='ia', type=bool, dest='ia', default=True)
     parser.add_argument('-d', metavar='affichage', type=bool, dest='affichage', default=True)
-    
 
     args = parser.parse_args()
 
@@ -32,16 +29,15 @@ def parseArguments():
     return args
 
 
-
-def main(playerType):
+def main():
     pygame.init()
     occurences = 1
     current_occurence = 0
 
-
+    args = parseArguments()
 
     fps = FPS
-    if playerType == "ai":
+    if not args.player:
         board = Board(BOARD_WIDTH, BOARD_HEIGHT, occurences, True)
         fps = TPS
     else:
@@ -65,7 +61,7 @@ def main(playerType):
             clock.tick(fps)
             continue
 
-        if playerType == "ai":
+        if not args.player:
             board.post_next_move()
 
         for event in pygame.event.get():
@@ -77,9 +73,9 @@ def main(playerType):
                 run = board.compute_key(event.key)
 
         tick += 1
-        if tick >= fps / TPS or playerType == "ai":
+        if tick >= fps / TPS or not args.player:
             gameOver = board.update()
-            if gameOver or (playerType == "ai" and board.moves is None):
+            if gameOver or (not args.player and board.moves is None):
                 current_occurence += 1
                 cont = True
                 board.scores.append(board.score)
@@ -97,4 +93,4 @@ def main(playerType):
 
 
 if __name__ == "__main__":
-    main("player")
+    main()
