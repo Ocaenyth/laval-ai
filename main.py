@@ -1,6 +1,5 @@
 import pygame
 
-from AiPlayer import AiPlayer
 from Board import TILE_SIZE, Board
 
 BOARD_WIDTH = 50
