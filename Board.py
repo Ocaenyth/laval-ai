@@ -5,6 +5,7 @@ import pygame
 from Apple import Apple
 from Direction import Direction
 from Snake import Snake
+from aStar import aStar
 
 TILE_SIZE = 20
 TILE_COLOR = (255, 255, 255)
@@ -17,7 +18,7 @@ NEXT_MOVE_COLOR = (14, 188, 232)
 # Game board class
 class Board:
     # Board constructor
-    def __init__(self, width, height, occurences, aiPlayer=None):
+    def __init__(self, width, height, occurences, aiPlayer=False, shortest=True):
         self.occurences = occurences
         self.player = Snake()
         # Instanciate a dummy apple
@@ -29,6 +30,7 @@ class Board:
         self.score = 0
         self.scores = []
         if aiPlayer is not None:
+            self.shortest = shortest
             self.moves = self.setMove()
         self.getNewApple()
 
@@ -176,8 +178,8 @@ class Board:
     # Called when an apple is eaten
     # Get a new set of moves for the snake
     def setMove(self):
-        return self.aiPlayer.getMove(self.player.body[0], self.apple.pos, self.player.direction, self.player.body,
-                                     self.height, self.width)
+        return aStar(self.player.body[0], self.apple.pos, self.player.direction, self.player.body,
+                     self.height, self.width, self.shortest)
 
     def game_over(self, window, clock):
         width = self.width * TILE_SIZE
