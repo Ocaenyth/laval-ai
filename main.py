@@ -2,6 +2,8 @@ import pygame
 
 from Board import TILE_SIZE, Board
 
+import argparse
+
 BOARD_WIDTH = 50
 BOARD_HEIGHT = 50
 FPS = 30
@@ -10,10 +12,33 @@ WINDOW_WIDTH = BOARD_WIDTH * TILE_SIZE
 WINDOW_HEIGHT = BOARD_HEIGHT * TILE_SIZE
 
 
+
+
+def parseArguments():
+    parser=argparse.ArgumentParser(description='argument')
+    parser.add_argument('-p', metavar='player', type=bool, dest='player', default=False)
+    parser.add_argument('-t', metavar='tick', type=int, dest='tick', default=5)
+    parser.add_argument('-o', metavar='occurence', type=int, dest='occurence', default=1)
+    parser.add_argument('-bw', metavar='width', type=int, dest='width', default=20)
+    parser.add_argument('-bh', metavar='height', type=int, dest='height', default=20)
+    parser.add_argument('-s', metavar='ia', type=bool, dest='ia', default=True)
+    parser.add_argument('-d', metavar='affichage', type=bool, dest='affichage', default=True)
+    
+
+    args = parser.parse_args()
+
+    print(args)
+
+    return args
+
+
+
 def main(playerType):
     pygame.init()
     occurences = 1
     current_occurence = 0
+
+
 
     fps = FPS
     if playerType == "ai":
