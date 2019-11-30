@@ -29,7 +29,7 @@ class Board:
         self.moves = None
         self.score = 0
         self.scores = []
-        if aiPlayer is not None:
+        if aiPlayer:
             self.shortest = shortest
             self.moves = self.setMove()
         self.getNewApple()
@@ -38,7 +38,7 @@ class Board:
         self.player = Snake()
         self.getNewApple()
         self.score = 0
-        if self.aiPlayer is not None:
+        if self.aiPlayer:
             self.moves = self.setMove()
         pass
 
@@ -78,7 +78,7 @@ class Board:
     def draw_board(self, window):
         window.fill(TILE_COLOR)
         self.draw_player(window)
-        if self.aiPlayer is not None:
+        if self.aiPlayer:
             self.draw_next_moves(window)
         self.draw_apples(window)
         pygame.display.flip()
@@ -152,7 +152,7 @@ class Board:
             if retry:
                 continue
             self.apple = Apple(x, y)
-            if self.aiPlayer is not None:
+            if self.aiPlayer:
                 self.moves = self.setMove()
 
     # post the AI's next move to pygame's event queue
