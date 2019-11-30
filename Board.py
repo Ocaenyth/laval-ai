@@ -17,16 +17,28 @@ NEXT_MOVE_COLOR = (14, 188, 232)
 # Game board class
 class Board:
     # Board constructor
-    def __init__(self, width, height, aiPlayer=None):
+    def __init__(self, width, height, occurences, aiPlayer=None):
+        self.occurences = occurences
         self.player = Snake()
         # Instanciate a dummy apple
         self.apple = Apple(0, 1)
         self.width = width
         self.height = height
         self.aiPlayer = aiPlayer
+        self.moves = None
+        self.score = 0
+        self.scores = []
         if aiPlayer is not None:
             self.moves = self.setMove()
         self.getNewApple()
+
+    def reset(self):
+        self.player = Snake()
+        self.getNewApple()
+        self.score = 0
+        if self.aiPlayer is not None:
+            self.moves = self.setMove()
+        pass
 
     # Will do the appropriate action based on the key given
     def compute_key(self, key):
@@ -55,6 +67,7 @@ class Board:
         appleEaten = self.player.move(self.apple)
         if appleEaten:
             self.getNewApple()
+            self.score += 1
         collision = self.player.checkCollision(self.width, self.height)
         if collision:
             return True
@@ -165,3 +178,37 @@ class Board:
     def setMove(self):
         return self.aiPlayer.getMove(self.player.body[0], self.apple.pos, self.player.direction, self.player.body,
                                      self.height, self.width)
+
+    def game_over(self, window, clock):
+        width = self.width * TILE_SIZE
+        height = self.height * TILE_SIZE
+        s = pygame.Surface((width, height))  # the size of your rect
+        s.set_alpha(128)  # alpha level
+        s.fill((0, 0, 0))  # this fills the entire surface
+        window.blit(s, (0, 0))
+
+        fonts = pygame.font.get_fonts()
+        font = pygame.font.SysFont(fonts[0], 15)
+        # TODO : get total score
+        t = "Average score: %.2f" % (self.get_total_score() / self.occurences)
+        text = font.render(t, True, (255, 255, 255), (0, 0, 0))
+        rect = text.get_rect()
+        rect.center = (width // 2, height // 2)
+        window.blit(text, rect)
+        pygame.display.flip()
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    return True
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    return False
+            clock.tick(5)
+
+    def get_total_score(self):
+        total = 0
+        print(self.scores)
+        for score in self.scores:
+            total += score
+        print(total)
+        return total
