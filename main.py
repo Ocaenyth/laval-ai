@@ -18,7 +18,7 @@ def main(playerType):
 
     fps = FPS
     if playerType == "ai":
-        board = Board(BOARD_WIDTH, BOARD_HEIGHT, occurences, AiPlayer())
+        board = Board(BOARD_WIDTH, BOARD_HEIGHT, occurences, True)
         fps = TPS
     else:
         board = Board(BOARD_WIDTH, BOARD_HEIGHT, occurences)
@@ -62,7 +62,7 @@ def main(playerType):
                 if current_occurence == occurences:
                     cont = board.game_over(window, clock)
                     current_occurence = 0
-                    board = Board(BOARD_WIDTH, BOARD_HEIGHT, occurences, board.aiPlayer)
+                    board = Board(BOARD_WIDTH, BOARD_HEIGHT, occurences, True)
                 if not cont:
                     return
                 board.reset()
@@ -73,4 +73,4 @@ def main(playerType):
 
 
 if __name__ == "__main__":
-    main("ai")
+    main("player")
