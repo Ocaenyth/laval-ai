@@ -18,19 +18,21 @@ NEXT_MOVE_COLOR = (14, 188, 232)
 # Game board class
 class Board:
     # Board constructor
-    def __init__(self, width, height, occurences, aiPlayer=False, shortest=True):
-        self.occurences = occurences
+    def __init__(self, width, height, occurrences, ai, shortest, display_moves):
+        self.occurrences = occurrences
         self.player = Snake()
         # Instanciate a dummy apple
         self.apple = Apple(0, 1)
         self.width = width
         self.height = height
-        self.aiPlayer = aiPlayer
+        self.isAI = ai
+        print(self.isAI)
         self.moves = None
         self.score = 0
         self.scores = []
-        if aiPlayer:
-            self.shortest = shortest
+        self.display_moves = display_moves
+        self.shortest = shortest
+        if ai:
             self.moves = self.setMove()
         self.getNewApple()
 
@@ -38,7 +40,7 @@ class Board:
         self.player = Snake()
         self.getNewApple()
         self.score = 0
-        if self.aiPlayer:
+        if self.isAI:
             self.moves = self.setMove()
         pass
 
@@ -78,7 +80,7 @@ class Board:
     def draw_board(self, window):
         window.fill(TILE_COLOR)
         self.draw_player(window)
-        if self.aiPlayer:
+        if self.isAI and self.display_moves:
             self.draw_next_moves(window)
         self.draw_apples(window)
         pygame.display.flip()
@@ -152,7 +154,7 @@ class Board:
             if retry:
                 continue
             self.apple = Apple(x, y)
-            if self.aiPlayer:
+            if self.isAI:
                 self.moves = self.setMove()
 
     # post the AI's next move to pygame's event queue
@@ -192,7 +194,7 @@ class Board:
         fonts = pygame.font.get_fonts()
         font = pygame.font.SysFont(fonts[0], 15)
         # TODO : get total score
-        t = "Average score: %.2f" % (self.get_total_score() / self.occurences)
+        t = "Average score: %.2f" % (self.get_total_score() / self.occurrences)
         text = font.render(t, True, (255, 255, 255), (0, 0, 0))
         rect = text.get_rect()
         rect.center = (width // 2, height // 2)
